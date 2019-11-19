@@ -94,35 +94,27 @@ move = {
   right: false,
 
   player:  function(event) {
-    let keyState = (event.type == "click") ? true : false;
-    // alert(event.keyCode);
-    // if(keyState)
 
-    let width = window.innerWidth;
 
-    if(event.clientX < width / 2){  
-      move.left = keyState;
-      move.right = false;
-    }else{
-      move.right = keyState;
-      move.left = false;
+    let keyState = (event.type == "keydown") ? true : false;
+
+
+
+    switch(event.keyCode){
+      case 32:
+      case 38:
+        ball.attached = false;
+        break;
+      case 37:
+        move.left = keyState;
+        // alert("Hi");
+        break;
+        case 39: 
+        // alert("Hellow");
+        move.right = keyState;
+        break;
+        break;  
     }
-
-
-    // switch(event.type){
-    //   case "click":  
-    //   move.left = keyState;
-    //     break;
-    //   case 32:
-    //   case 38:
-    //     ball.attached = false;
-    //     break;
-    //   case "mouseup":      
-    //   alert("hi")  
-    //     // move.right = false;
-    //     // move.left = false;
-    //     break;  
-    // }
   },
       
   attachedOrNot(player, ball){
@@ -295,7 +287,8 @@ function loop(){
 }
 
 // window.addEventListener("mousedown", move.player);
-window.addEventListener("click", move.player);
+window.addEventListener("keydown", move.player);
+window.addEventListener("keyup", move.player);
 window.requestAnimationFrame(loop);
 
 
