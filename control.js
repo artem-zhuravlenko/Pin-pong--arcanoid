@@ -26,7 +26,7 @@ ball = {
   attached: true,
   type: "Normal",
   speedX: 4,
-  speedY: 4            
+  speedY: 4,            
 },
 
 brick = {
@@ -53,9 +53,10 @@ brick = {
   fillCoordinats(brick){
     for(let i = 0; i < brick.row; i++){
       for(let j = 0; j < brick.col; j++){
-        brick.bricks[i][j].x = brick.H_distance + (brick.width  + brick.H_distance) * i;
-        brick.bricks[i][j].y = brick.V_distance + (brick.height + brick.V_distance) * j;
-        brick.bricks[i][j].visable = true;
+        let b = brick.bricks[i][j];
+        b.x = brick.H_distance + (brick.width  + brick.H_distance) * i;
+        b.y = brick.V_distance + (brick.height + brick.V_distance) * j;
+        b.visable = true;
       }
     }
     // brick.bricks[1][1].visable = false;
@@ -128,6 +129,8 @@ move = {
   },
 };
 
+
+
 collide = {
   signChange(ball, n){
     if(n == 1){
@@ -169,12 +172,16 @@ collide = {
     y = Math.floor((ball.y - brick.V_distance) / (brick.V_distance + brick.height)); 
     
     
+    
     if(y <= 2 && y >= 0 && x <= 4 && x >= 0){
-      if(brick.bricks[x][y].visable){
-        brick.bricks[x][y].visable = false;
+      let b = brick.bricks[x][y];
+      if(b.visable){
+        b.visable = false;
+        ball.speedY *= -1;
         brick.text -= 1;
       }
     }
+
   },
 
   borderPlayer(brick){
@@ -185,6 +192,8 @@ collide = {
       player.x = canvas.width - player.width;
     }
   },
+
+  
 
   collide(ball, brick, player){
     // console.log("Hi");
@@ -237,7 +246,7 @@ utility = {
     }else{
       ctx.font = "100px Aerial";
       toString(num);
-      ctx.fillText(('0'+ num).slice(-2), canvas.width / 2 - utility.textWidth(num, 100), canvas.height / 2 - 50);
+      ctx.fillText(('0'+ num).slice(-2), canvas.width / 2 - utility.textWidth(num, 100), canvas.height / 2);
     }
   },
   
