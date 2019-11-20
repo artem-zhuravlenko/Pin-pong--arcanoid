@@ -29,6 +29,13 @@ ball = {
   speedY: 4,            
 },
 
+levelBtns = {
+  V_distance: 5,
+  with: (canvas.width - 4 * 5) / 3,
+  height: 20,
+  color: "#808080",
+}
+
 brick = {
   row: 5,
   col: 3,
@@ -87,6 +94,14 @@ draw = {
       }
     }
   },
+
+  chooseLevels(){
+
+    for(let i = 0; i < 3; i++){
+      draw.rect(levelBtns.V_distance * (i + 1)+ levelBtns.with * i, canvas.height - levelBtns.height, levelBtns.with, levelBtns.height, levelBtns.color);
+      utility.message(i+1, levelBtns)
+    }
+  }
 };
 
 
@@ -167,6 +182,7 @@ collide = {
   },
 
   collideBrick(ball, brick){
+
     let x, y;
     x = Math.floor((ball.x - brick.H_distance) / (brick.H_distance + brick.width ));
     y = Math.floor((ball.y - brick.V_distance) / (brick.V_distance + brick.height)); 
@@ -220,7 +236,7 @@ utility = {
    gameover(ball){
     if(ball.y - ball.radius > canvas.height){
       brick.text = "Game Over!"
-      utility.message(brick.text);
+      utility.message(brick.text, canvas);
       ball.speedX = 0;
       ball.speedY = 0;
       setTimeout(()=>{utility.reset(brick)}, 4000);
@@ -230,23 +246,23 @@ utility = {
   win(brick){ 
     if(brick.text == 0){
       brick.text = "You Win!";
-      utility.message(brick.text);
+      utility.message(brick.text, canvas);
       ball.speedX = 0;
       ball.speedY = 0;
       setTimeout(()=>{utility.reset(brick)}, 4000);  
     }
   }, 
   
-  message(num){
+  message(num, object){
     ctx.fillStyle = "#c5c5c5";
     ctx.beginPath();
     if(isNaN(num)){
-      ctx.font = `${canvas.width / num.length}px Aerial`;
-      ctx.fillText(num, canvas.width / 2 - utility.textWidth(num, canvas.width / num.length), canvas.height / 2)
+      ctx.font = `${object.width / num.length}px Aerial`;
+      ctx.fillText(num, object.width / 2 - utility.textWidth(num, object.width / num.length), object.height / 2)
     }else{
       ctx.font = "100px Aerial";
       toString(num);
-      ctx.fillText(('0'+ num).slice(-2), canvas.width / 2 - utility.textWidth(num, 100), canvas.height / 2);
+      ctx.fillText(('0'+ num).slice(-2), object.width / 2 - utility.textWidth(num, 100), object.height / 2);
     }
   },
   
@@ -280,12 +296,13 @@ function loop(){
   //Player
   draw.rect(player.x, player.y, player.width, player.height, player.color);
   //Message
-  utility.message(brick.text);
+  utility.message(brick.text, canvas);
   //Ball
   draw.circle(ball.x, ball.y, ball.radius, ball.color);
   //Bricks
   draw.field(brick);
   
+  draw.chooseLevels();
   
   move.attachedOrNot(player, ball);
   
